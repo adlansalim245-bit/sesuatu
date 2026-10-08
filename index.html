@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Ten Frame</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      margin-top: 30px;
+    }
+    h1 { color: #333; }
+    .target-box {
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .ten-frame {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-template-rows: repeat(2, 80px);
+      gap: 5px;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+      background-color: #333;
+      padding: 5px;
+      border-radius: 8px;
+      width: fit-content;
+    }
+    .cell {
+      background-color: #fff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .dot {
+      width: 60px;
+      height: 60px;
+      background-color: #ff4757;
+      border-radius: 50%;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2ed573;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #26af5f; }
+    #message {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Game Ten Frame</h1>
+  <div class="target-box">Isi frame dengan angka: <span id="target-number">0</span></div>
+  
+  <div class="ten-frame" id="frame"></div>
+
+  <button onclick="checkAnswer()">Cek Jawaban</button>
+  <div id="message"></div>
+
+  <script>
+    let targetNumber = 0;
+    const frame = document.getElementById('frame');
+
+    // Buat 10 kotak frame
+    for (let i = 0; i < 10; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.addEventListener('click', () => {
+        if (cell.innerHTML === '') {
+          cell.innerHTML = '<div class="dot"></div>';
+        } else {
+          cell.innerHTML = '';
+        }
+      });
+      frame.appendChild(cell);
+    }
+
+    function generateNewQuestion() {
+      targetNumber = Math.floor(Math.random() * 10) + 1;
+      document.getElementById('target-number').textContent = targetNumber;
+      document.getElementById('message').textContent = '';
+      
+      // Kosongkan frame
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cell => cell.innerHTML = '');
+    }
+
+    function checkAnswer() {
+      const dotsCount = document.querySelectorAll('.dot').length;
+      const message = document.getElementById('message');
+
+      if (dotsCount === targetNumber) {
+        message.style.color = '#2ed573';
+        message.textContent = 'Hebat! Jawaban kamu benar! 🎉';
+        setTimeout(generateNewQuestion, 1500);
+      } else {
+        message.style.color = '#ff4757';
+        message.textContent = `Masih kurang tepat. Kamu baru mengisi ${dotsCount} titik. Coba lagi!`;
+      }
+    }
+
+    // Mulai game pertama kali
+    generateNewQuestion();
+  </script>
+
+</body>
+</html>
